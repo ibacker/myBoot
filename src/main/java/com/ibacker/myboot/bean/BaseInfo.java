@@ -1,4 +1,4 @@
-package com.ibacker.myboot.Bean;
+package com.ibacker.myboot.bean;
 
 import lombok.Data;
 
