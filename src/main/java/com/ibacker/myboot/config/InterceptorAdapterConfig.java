@@ -2,21 +2,36 @@ package com.ibacker.myboot.config;
 
 import com.ibacker.myboot.Interceptor.AuthorityInterceptor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.annotation.Resource;
 
+/**
+ * 拦截器配置
+ * 测试拦截器执行顺序
+ */
 @Configuration
 public class InterceptorAdapterConfig extends WebMvcConfigurerAdapter {
     @Resource
     private AuthorityInterceptor authorityInterceptor;
 
+    @Resource
+    private com.ibacker.myboot.Interceptor.AInterceptor AInterceptor;
+
+    @Resource
+    private com.ibacker.myboot.Interceptor.BInterceptor BInterceptor;
+
+
+    /**
+     * Interceptor 拦截器
+     * 执行顺序; PRE正向顺序; POST\AFTER 反向逆序
+     */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(authorityInterceptor).addPathPatterns("/**");
+        registry.addInterceptor(authorityInterceptor).addPathPatterns("/*/interceptor/*").order(200);
+        registry.addInterceptor(AInterceptor).addPathPatterns("/interceptor/*").order(100);
+        registry.addInterceptor(BInterceptor).addPathPatterns("*").order(300);
         super.addInterceptors(registry);
     }
 }
