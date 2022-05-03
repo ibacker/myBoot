@@ -9,17 +9,12 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Method;
-import java.util.ResourceBundle;
-
 @Aspect
 @Slf4j
 @Component
-public class HandlerException {
-//    Logger log = (Logger) LoggerFactory.getLogger(HandlerException.class);
+public class WebExceptionHandler {
 
     @Pointcut("execution( * com.ibacker.myboot.controller..*.*(..))")
-//    @Pointcut("target(com.tell.service.)")
     public void webException() {
     }
 
@@ -27,28 +22,16 @@ public class HandlerException {
     public ResultObject handlerControllerMethod(ProceedingJoinPoint proceedingJoinPoint) {
         ResultObject ResultObject;
         try {
-            long startTime = System.currentTimeMillis();
             ResultObject = (ResultObject) proceedingJoinPoint.proceed();
-            long endTime = System.currentTimeMillis() - startTime;
 
-
-//            log.info("最后花费的时间为：" + endTime);
-            System.out.println("最后花费的时间为："+endTime);
         } catch (Throwable e) {
-            System.out.println("hadlerExveption");
-//            for (Method method: UserController.class.getDeclaredMethods()) {
-//                if(method.getName().equals(proceedingJoinPoint.getSignature().getName())){
-//                    LogWrite logWrite = method.getAnnotation(LogWrite.class);
-//                    if(logWrite!=null){
-//                        System.out.println("Found LogWrite:"+logWrite.user()+" "+logWrite.action() +"处理失败");
-//                    }
-//                }
-//            }
+
             ResultObject = handlerException(e);
         }
 
         return ResultObject;
     }
+
     private ResultObject handlerException(Throwable throwable) {
         ResultObject ResultObject = new ResultObject();
         if (throwable instanceof IllegalArgumentException || throwable instanceof NullPointerException) {
@@ -56,7 +39,7 @@ public class HandlerException {
             ResultObject.setCode(400);
             ResultObject.setMessage("参数或空指针异常");
             log.error("[AOP] IllegalArgumentException or ullPointerException");
-        } else if(throwable instanceof RuntimeException){
+        } else if (throwable instanceof RuntimeException) {
             ResultObject.setSuccess(false);
             ResultObject.setMessage("运行时异常！");
             ResultObject.setCode(111);

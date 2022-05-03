@@ -1,4 +1,4 @@
-package com.ibacker.myboot.handler;
+package com.ibacker.myboot.exceptionhandler;
 
 
 import com.ibacker.myboot.bean.ResultObject;
@@ -61,6 +61,16 @@ public class GlobalExceptionHandler {
         ResultObject.setSuccess(false);
         ResultObject.setCode(000);
         ResultObject.setMessage("空指针异常");
+        return ResultObject;
+    }
+
+    @ExceptionHandler(value = ClassCastException.class)
+    @ResponseBody
+    public ResultObject ClassCastErrorHandler(HttpServletRequest request, NullPointerException e) {
+        ResultObject ResultObject = new ResultObject();
+        ResultObject.setSuccess(false);
+        ResultObject.setCode(000);
+        ResultObject.setMessage("类型转换异常");
         return ResultObject;
     }
 }

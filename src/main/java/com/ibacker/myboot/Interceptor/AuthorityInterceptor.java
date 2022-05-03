@@ -1,11 +1,13 @@
 package com.ibacker.myboot.Interceptor;
 
+import com.ibacker.myboot.aop.AuthorityVerifyAnnotation;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.HttpRequestHandler;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -21,6 +23,53 @@ public class AuthorityInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         log.info("进入到拦截器中:preHandle");
+
+        if (handler instanceof HandlerMethod) {
+
+            HandlerMethod handlerMethod = (HandlerMethod) handler;
+            AuthorityVerifyAnnotation annotation = handlerMethod.getMethodAnnotation(AuthorityVerifyAnnotation.class);
+            // 只处理有注解的请求
+            if (!ObjectUtils.isEmpty(annotation) && annotation.verify()) {
+                MDCPreLog(request, response, handler);
+                return true;
+            }
+        }
+
+
+        return true;
+    }
+
+    /**
+     * postHandle 会在handler处理完成之后执行，而afterCompletion会在整个请求处理完毕之后执行。也就是执行
+     * <p>
+     * 一个典型的例子是如果在controller中抛错，那么postHandle不会执行，而afterCompletion会执行
+     */
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
+        MDC.put("result", "OK");
+        log.info("进入到拦截器中:postHandle");
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {
+
+        if (handler instanceof HandlerMethod) {
+            HandlerMethod handlerMethod = (HandlerMethod) handler;
+            AuthorityVerifyAnnotation annotation = handlerMethod.getMethodAnnotation(AuthorityVerifyAnnotation.class);
+            // 只处理有注解的请求
+            if (!ObjectUtils.isEmpty(annotation) && annotation.verify()) {
+                MDCAfterLog();
+            }
+        }
+        log.info("进入到拦截器中: afterComponent");
+    }
+
+    /**
+     * 请求日志
+     */
+
+    private void MDCPreLog(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String requestId = UUID.randomUUID().toString();
         String startTime = Long.toString(new Date().getTime());
         String uri = request.getRequestURI();
@@ -42,17 +91,12 @@ public class AuthorityInterceptor implements HandlerInterceptor {
         MDC.put("method", method);
         MDC.put("ip", ip);
         MDC.put("userAgent", userAgent);
-        return true;
     }
 
-    @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
-        MDC.put("result", "OK");
-        log.info("进入到拦截器中:postHandle");
-    }
-
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {
+    /**
+     * 返回日志
+     */
+    private void MDCAfterLog() {
         String endTime = Long.toString(new Date().getTime());
         log.info("request end: requestId: {}, endTime:{}, result: {}", MDC.get("requestId"), endTime, MDC.get("result"));
 
@@ -64,7 +108,6 @@ public class AuthorityInterceptor implements HandlerInterceptor {
         MDC.remove("ip");
         MDC.remove("userAgent");
         MDC.remove("result");
-        log.info("进入到拦截器中: afterComponent");
     }
 
 }
