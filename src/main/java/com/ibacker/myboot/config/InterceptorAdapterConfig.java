@@ -3,7 +3,7 @@ package com.ibacker.myboot.config;
 import com.ibacker.myboot.interfafce.Interceptor.AuthorityInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.Resource;
 
@@ -12,7 +12,7 @@ import javax.annotation.Resource;
  * 测试拦截器执行顺序
  */
 @Configuration
-public class InterceptorAdapterConfig extends WebMvcConfigurerAdapter {
+public class InterceptorAdapterConfig implements WebMvcConfigurer {
     @Resource
     private AuthorityInterceptor authorityInterceptor;
 
@@ -30,8 +30,7 @@ public class InterceptorAdapterConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authorityInterceptor).addPathPatterns("/*/interceptor/*").order(200);
-        registry.addInterceptor(AInterceptor).addPathPatterns("/interceptor/*").order(100);
-        registry.addInterceptor(BInterceptor).addPathPatterns("*").order(300);
-        super.addInterceptors(registry);
+        registry.addInterceptor(AInterceptor).addPathPatterns("/*/interceptor/*").order(100);
+        registry.addInterceptor(BInterceptor).addPathPatterns("/**").order(300);
     }
 }
