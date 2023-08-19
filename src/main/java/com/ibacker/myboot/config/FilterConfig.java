@@ -1,6 +1,6 @@
 package com.ibacker.myboot.config;
 
-import com.ibacker.myboot.filter.RequestFilter;
+import com.ibacker.myboot.interfafce.filter.RequestFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 public class FilterConfig {
     @Resource
     RequestFilter requestFilter;
+
     @Bean
     public FilterRegistrationBean<RequestFilter> testFilter3RegistrationBean() {
         FilterRegistrationBean<RequestFilter> registration = new FilterRegistrationBean<>(requestFilter);

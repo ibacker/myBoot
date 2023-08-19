@@ -1,7 +1,6 @@
 package com.ibacker.myboot.config;
 
-import com.ibacker.myboot.Interceptor.restTemplateInterceptor.TrackLogClientHttpRequestInterceptor;
-import org.aopalliance.intercept.Interceptor;
+import com.ibacker.myboot.interfafce.Interceptor.restTemplateInterceptor.TrackLogClientHttpRequestInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,10 +22,10 @@ public class RestTemplateConfig {
 
 
     @Bean
-    public RestTemplate restTemplate (ClientHttpRequestFactory simpleClientHttpRequestFactory) {
+    public RestTemplate restTemplate(ClientHttpRequestFactory simpleClientHttpRequestFactory) {
         RestTemplate restTemplate = new RestTemplate();
         // add Interceptor
-        List<ClientHttpRequestInterceptor> interceptors = new ArrayList(){{
+        List<ClientHttpRequestInterceptor> interceptors = new ArrayList() {{
             add(new TrackLogClientHttpRequestInterceptor());
         }};
         restTemplate.setInterceptors(interceptors);

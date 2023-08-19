@@ -1,6 +1,6 @@
 package com.ibacker.myboot.config;
 
-import com.ibacker.myboot.Interceptor.AuthorityInterceptor;
+import com.ibacker.myboot.interfafce.Interceptor.AuthorityInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -17,10 +17,10 @@ public class InterceptorAdapterConfig extends WebMvcConfigurerAdapter {
     private AuthorityInterceptor authorityInterceptor;
 
     @Resource
-    private com.ibacker.myboot.Interceptor.AInterceptor AInterceptor;
+    private com.ibacker.myboot.interfafce.Interceptor.AInterceptor AInterceptor;
 
     @Resource
-    private com.ibacker.myboot.Interceptor.BInterceptor BInterceptor;
+    private com.ibacker.myboot.interfafce.Interceptor.BInterceptor BInterceptor;
 
 
     /**
