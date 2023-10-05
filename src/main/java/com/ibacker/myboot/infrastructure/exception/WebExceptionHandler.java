@@ -19,17 +19,15 @@ public class WebExceptionHandler {
     }
 
     @Around("webException()")
-    public ResultObject handlerControllerMethod(ProceedingJoinPoint proceedingJoinPoint) {
-        ResultObject ResultObject;
+    public Object handlerControllerMethod(ProceedingJoinPoint proceedingJoinPoint) {
+        Object o = new Object();
         try {
-            ResultObject = (ResultObject) proceedingJoinPoint.proceed();
-
+             o =  proceedingJoinPoint.proceed();
         } catch (Throwable e) {
-
-            ResultObject = handlerException(e);
+            o = handlerException(e);
         }
 
-        return ResultObject;
+        return o;
     }
 
     private ResultObject handlerException(Throwable throwable) {

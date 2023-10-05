@@ -13,7 +13,6 @@ public class ZooKeeperPracticeService {
     ZooKeeperClient zooKeeperClient;
 
     public List<String> getChildren(String path) throws Exception {
-//        zooKeeperClient.getClient().create().forPath(path);
         if (StringUtils.isEmpty(path)) {
             path = "/";
         }
