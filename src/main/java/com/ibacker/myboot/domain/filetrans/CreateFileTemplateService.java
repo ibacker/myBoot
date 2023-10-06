@@ -20,14 +20,14 @@ public class CreateFileTemplateService {
     @javax.annotation.Resource
     private ResourceLoader resourceLoader;
 
-    private String createTxtFile() {
+    private String createFile(String path, String content) {
         try {
             // 获取资源目录的位置
             Resource resource = resourceLoader.getResource("classpath:");
             // 默认是项目的resources目录
 
             // 构建文件的相对路径
-            String relativePath = "myfiles/myfile.txt";
+            String relativePath = "myfiles" + path;
 
             // 获取文件的绝对路径
             Path absolutePath = resource.getFile().toPath().resolve(relativePath);
@@ -39,8 +39,8 @@ public class CreateFileTemplateService {
             }
 
             // 创建文件并写入内容
-            String content = "This is the content of the txt file.";
-            FileCopyUtils.copy(content.getBytes(), absolutePath.toFile());
+            String contentTmp = StringUtils.isEmpty(content) ? "This is the content of the txt file." : content;
+            FileCopyUtils.copy(contentTmp.getBytes(), absolutePath.toFile());
 
             return "Txt file created successfully!";
         } catch (IOException e) {
@@ -78,7 +78,7 @@ public class CreateFileTemplateService {
 
     public byte[] createBytesFromTxtFile() {
         if (StringUtils.isEmpty(getContentFromMyFile())) {
-            createTxtFile();
+            createFile("/myfiles/myfile.txt", null);
         }
         return getContentFromMyFile().getBytes();
     }
@@ -90,7 +90,7 @@ public class CreateFileTemplateService {
                 return resource.getFile();
             }
 
-            createTxtFile();
+              createFile("/myfiles/myfile.txt", null);
             return new ClassPathResource("myfiles/myfile.txt").getFile();
         } catch (Exception e) {
             log.error("getTxtFile error: {}", e.getMessage(), e);
@@ -98,4 +98,53 @@ public class CreateFileTemplateService {
         return new File("C/");
     }
 
+    public File getJsFile() {
+        try {
+            Resource resource = new ClassPathResource("myfiles/myJs.js");
+            if (resource.exists()) {
+                return resource.getFile();
+            }
+            String jsContent = "function my(){console.log()}";
+              createFile("/myfiles/myJs.js", jsContent);
+            return new ClassPathResource("myfiles/myJs.txt").getFile();
+        } catch (Exception e) {
+            log.error("getJsFile error: {}", e.getMessage(), e);
+        }
+        return new File("C/");
+    }
+    public File getJpeg() {
+        try {
+            Resource resource = new ClassPathResource("myfiles/photo.JPG");
+            if (resource.exists()) {
+                return resource.getFile();
+            }
+        } catch (Exception e) {
+            log.error("getJsFile error: {}", e.getMessage(), e);
+        }
+        return new File("C/");
+    }
+
+    public File getPdfFile() {
+        try {
+            Resource resource = new ClassPathResource("myfiles/file.pdf");
+            if (resource.exists()) {
+                return resource.getFile();
+            }
+        } catch (Exception e) {
+            log.error("getJsFile error: {}", e.getMessage(), e);
+        }
+        return new File("C/");
+    }
+
+    public File getXlsxFile() {
+        try {
+            Resource resource = new ClassPathResource("myfiles/file.xlsx");
+            if (resource.exists()) {
+                return resource.getFile();
+            }
+        } catch (Exception e) {
+            log.error("getJsFile error: {}", e.getMessage(), e);
+        }
+        return new File("C/");
+    }
 }
