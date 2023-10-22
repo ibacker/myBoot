@@ -1,13 +1,16 @@
 package com.ibacker.myboot.application;
 
 import com.ibacker.myboot.domain.filetrans.CreateFileTemplateService;
+import com.ibacker.myboot.domain.filetrans.entity.FileInfo;
 import com.ibacker.myboot.infrastructure.bean.ResultObject;
+import com.ibacker.myboot.infrastructure.util.JsonUtil;
 import com.ibacker.myboot.interfafce.dto.filetrans.FileInfoRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.apache.http.entity.ContentType;
 import org.apache.http.HttpEntity;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
@@ -115,7 +118,7 @@ public class FileTransService {
 //        headers.setContentDispositionFormData("attachment", getFilename(file.getPath()));
         headers.setContentDisposition(ContentDisposition.attachment().filename(getFilename(file.getPath())).build());
         //定义以流的形式下载返回文件数据
-        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         //使用springmvc框架的ResponseEntity对象封装返回数据
         return ResponseEntity.ok().headers(headers).body(FileUtils.readFileToByteArray(file));
     }
@@ -140,6 +143,7 @@ public class FileTransService {
         //使用springmvc框架的ResponseEntity对象封装返回数据
         return ResponseEntity.ok().headers(headers).body(FileUtils.readFileToByteArray(file));
     }
+
     public ResponseEntity<InputStreamResource> downloadXlsFileInputStreamResource() throws IOException {
 
         File file = createFileTemplateService.getXlsxFile();
@@ -197,11 +201,18 @@ public class FileTransService {
         File file = createFileTemplateService.getXlsxFile();
         HttpEntity httpEntity = MultipartEntityBuilder.create()
                 // 表单 => （部件名称，数据，类型），要注意uri编码
-                .addPart("name", new StringBody(UriUtils.encode("SpringBoot中文社区", StandardCharsets.UTF_8), ContentType.APPLICATION_FORM_URLENCODED))
+                .addPart("name",
+                        new StringBody(UriUtils.encode("nameStr", StandardCharsets.UTF_8), ContentType.APPLICATION_FORM_URLENCODED))
                 // JSON => （部件名称，JSON，类型）
-                .addPart("info", new StringBody("{\"site\": \"https://springboot.io\", \"year\": 2019}", ContentType.APPLICATION_JSON))
+                .addPart("info",
+                        new StringBody(JsonUtil.objectToJson(new FileInfo()), ContentType.APPLICATION_JSON))
                 // 文件 => （ 部件名称，文件，类型，文件名称）
-                .addBinaryBody("file",createFileTemplateService.getXlsxFile(), ContentType.APPLICATION_OCTET_STREAM, "myfiles/file.xlsx")
+                .addPart("file",
+                        new FileBody(createFileTemplateService.getPdfFile(), ContentType.APPLICATION_OCTET_STREAM, "file.pdf"))
+                // 二进制
+                .addBinaryBody("file",
+                        (new InputStreamResource(Files.newInputStream(file.toPath())).getInputStream()),
+                        ContentType.APPLICATION_OCTET_STREAM, "file.xlsx")
                 .build();
 
         // 设置ContentType
