@@ -1,6 +1,7 @@
 package com.ibacker.myboot.interfafce.controller;
 
 import com.ibacker.myboot.domain.resttemplate.entity.Post;
+import com.ibacker.myboot.domain.resttemplate.service.PostRequestType;
 import com.ibacker.myboot.infrastructure.bean.ResultObject;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -20,6 +21,9 @@ public class RestTemplateController {
     private final String domain = "http://jsonplaceholder.typicode.com";
     @Resource
     RestTemplate restTemplate;
+
+    @Resource
+    PostRequestType postRequestType;
 
     @GetMapping("getpost/{id}")
     public ResultObject getForObject(@PathVariable String id) {
@@ -67,6 +71,13 @@ public class RestTemplateController {
         HttpEntity<Post> entity = new HttpEntity<>(post, headers);
         Object object = restTemplate.postForObject(url, entity, Post.class);
         resultObject.setResult(object);
+        return resultObject;
+    }
+
+    @GetMapping("queryPost")
+    public ResultObject queryPost(@RequestParam String id) {
+        ResultObject resultObject = new ResultObject();
+        resultObject.setResult(postRequestType.queryPostById(id));
         return resultObject;
     }
 
