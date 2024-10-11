@@ -16,4 +16,8 @@ public class HotSearchService {
     public void pushZhiHuInfo(zhiHuHot hotInfo) {
         hotSearchPush.pushZhiHuHotSearch(hotInfo);
     }
+
+    public void pushZhiHuHotSearch(zhiHuHot hotInfo) {
+        hotSearchPush.pushZhiHuHotSearchKafka(hotInfo);
+    }
 }

@@ -33,10 +33,13 @@ public class MyKafkaProducer {
                         1000);
                 props.put(ProducerConfig.RETRIES_CONFIG,
                         0);
+
                 props.put(ProducerConfig.RETRY_BACKOFF_MS_CONFIG,
                         1000);
 
                 props.put("max.block.ms",10000);
+
+                props.setProperty(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, "com.ibacker.myboot.infrastructure.kafka.intercpetors.CustomProducerInterceptor");
 
 
                 singletonProducer = new KafkaProducer<>(props);

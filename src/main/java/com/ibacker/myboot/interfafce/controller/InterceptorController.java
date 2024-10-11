@@ -17,7 +17,7 @@ public class InterceptorController {
     public ResultObject interceptorTest(@RequestBody BaseInfo info) {
         ResultObject resultObject = new ResultObject();
 
-        ApiAssert.notTrue(true, "not true");
+//        ApiAssert.notTrue(true, "not true");
         resultObject.setResult("interceptorTest");
 
         return resultObject;

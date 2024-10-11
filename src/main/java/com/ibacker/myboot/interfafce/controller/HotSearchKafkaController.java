@@ -22,7 +22,8 @@ public class HotSearchKafkaController {
     ResultObject pushZhiHuINfo(@RequestBody zhiHuHot info) {
         ResultObject resultObject = new ResultObject();
         try {
-            hotSearchService.pushZhiHuInfo(info);
+//            hotSearchService.pushZhiHuInfo(info);
+            hotSearchService.pushZhiHuHotSearch(info);
         } catch (Exception e) {
             ResultObject.error(e.getMessage());
         }
