@@ -36,18 +36,18 @@ public class WebExceptionHandler {
             ResultObject.setSuccess(false);
             ResultObject.setCode(400);
             ResultObject.setMessage("参数或空指针异常");
-            log.error("[AOP] IllegalArgumentException or ullPointerException");
+            log.error("[AOP] IllegalArgumentException or ullPointerException", throwable);
         } else if (throwable instanceof RuntimeException) {
             ResultObject.setSuccess(false);
             ResultObject.setMessage("运行时异常！");
             ResultObject.setCode(111);
             ResultObject.setMessage("使用AOP实现异常处理，该异常为runtimeException");
-            log.error("[AOP] RuntimeException");
+            log.error("[AOP] RuntimeException", throwable);
         } else {
             ResultObject.setSuccess(false);
             ResultObject.setMessage("未知异常！");
             ResultObject.setCode(222);
-            log.error("[AOP] unKnownException");
+            log.error("[AOP] unKnownException", throwable);
         }
         return ResultObject;
     }
