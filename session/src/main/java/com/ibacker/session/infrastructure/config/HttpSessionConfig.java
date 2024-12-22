@@ -1,4 +1,4 @@
-package com.ibacker.session.config;
+package com.ibacker.session.infrastructure.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
