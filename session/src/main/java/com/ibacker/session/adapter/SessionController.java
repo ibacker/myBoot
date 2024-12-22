@@ -29,7 +29,7 @@ public class SessionController {
     // 从 Session 中读取数据
     @GetMapping("/get")
     public String getSession(HttpSession session) {
-        Object data = session.getAttribute("key");
+        Object data = session.getAttribute("verifyCode");
         return data != null ? "Session data: " + data : "No session data found.";
     }
 }
