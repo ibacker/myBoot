@@ -1,0 +1,29 @@
+server:
+  port: 8080  # 网关服务端口
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/testDb?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: xxx
+    password: xxx
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 5
+      max-active: 20
+      min-idle: 5
+      max-wait: 60000
+      validation-query: SELECT 1
+      test-on-borrow: true
+      test-while-idle: true
+      stat-view-servlet:
+        enabled: false
+
+
+# Gateway Configuration
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: false # 禁用服务发现的默认路由
+

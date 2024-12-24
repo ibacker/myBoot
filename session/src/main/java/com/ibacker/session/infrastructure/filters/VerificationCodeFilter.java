@@ -2,6 +2,7 @@ package com.ibacker.session.infrastructure.filters;
 
 import com.ibacker.session.infrastructure.config.VerificationConfig;
 import com.ibacker.session.infrastructure.exception.VerificationCodeMismatchException;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
@@ -21,7 +22,7 @@ import java.io.IOException;
 
 @Order(Integer.MAX_VALUE - 1)
 @Component
-public class VerificationCodeFilter extends OncePerRequestFilter implements CommandLineRunner {
+public class VerificationCodeFilter extends OncePerRequestFilter implements CommandLineRunner, InitializingBean {
 
     @Resource
     private VerificationConfig verificationConfig;
@@ -63,5 +64,10 @@ public class VerificationCodeFilter extends OncePerRequestFilter implements Comm
     @Override
     public void run(String... args) throws Exception {
         System.out.println("Filter初始化 CommandLineRunner ...");
+    }
+
+    @Override
+    public void afterPropertiesSet() {
+        System.out.println("Filter初始化 InitializingBean do something");
     }
 }
