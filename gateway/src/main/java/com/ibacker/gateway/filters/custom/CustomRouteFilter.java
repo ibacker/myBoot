@@ -1,4 +1,4 @@
-package com.ibacker.gateway.filters;
+package com.ibacker.gateway.filters.custom;
 
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;

@@ -1,4 +1,4 @@
-package com.ibacker.gateway.filters;
+package com.ibacker.gateway.filters.global;
 
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -12,8 +12,9 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
+        System.out.println("Executing CustomGlobalFilter - Pre");
         // 打印请求路径
-        System.out.println("Global Filter: " + exchange.getRequest().getURI().getPath());
+        System.out.println("CustomGlobalFilter: " + exchange.getRequest().getURI().getPath());
 
         // 添加请求头
         exchange.getRequest().mutate().header("X-Custom-Header", "MyGateway").build();
@@ -21,12 +22,14 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         return chain.filter(exchange)
                 .then(Mono.fromRunnable(() -> {
                     // 响应后处理逻辑
-                    System.out.println("Response status code: " + exchange.getResponse().getStatusCode());
+                    System.out.println("CustomGlobalFilter Response status code: " + exchange.getResponse().getStatusCode());
+                    System.out.println("Executing CustomGlobalFilter - Post");
+
                 }));
     }
 
     @Override
     public int getOrder() {
-        return -1; // 优先级，数字越小优先级越高
+        return 2; // 优先级，数字越小优先级越高
     }
 }

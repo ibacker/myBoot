@@ -19,7 +19,7 @@ public class RouteController {
 
     @PostMapping("/refresh")
     public ResponseEntity<String> refreshRoutes() {
-//        dynamicRouteService.updateRoutes();
+        dynamicRouteService.updateRoutes();
         return ResponseEntity.ok("Routes refreshed successfully!");
     }
 }
