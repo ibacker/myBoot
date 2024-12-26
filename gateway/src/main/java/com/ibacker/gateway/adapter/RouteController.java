@@ -1,5 +1,6 @@
-package com.ibacker.gateway;
+package com.ibacker.gateway.adapter;
 
+import com.ibacker.gateway.DynamicRouteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
