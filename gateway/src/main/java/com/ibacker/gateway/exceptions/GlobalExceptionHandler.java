@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
 
-@Component
+//@Component
 public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
 
     @Override
